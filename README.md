@@ -26,7 +26,7 @@
 
 - `requirements.txt`
 - `Procfile`
-- `.env`（**Gitには含めない！**）
+- `.env`（**Gitには含めない**）
 
 ### 2. Renderの設定
 
@@ -44,7 +44,7 @@
 ### 3. PostgreSQLを使う場合
 
 - RenderでDatabase → PostgreSQLを作成
-- `DATABASE_URL` を環境変数にコピペすればOK！
+- `DATABASE_URL` を環境変数にコピペ
 
 ##  環境変数（例）
 
@@ -53,7 +53,7 @@ SECRET_KEY=your-secret-key-here DATABASE_URL=postgresql://user:pass@host:port/db
 
 ##  ディレクトリ構成（抜粋）
 
-flask_project/ ├── app.py ├── models.py ├── forms.py ├── routes/ │ ├── auth.py │ └── test.py ├── templates/ │ └── *.html ├── requirements.txt ├── Procfile └── .env # Gitに含めない！
+flask_project/ ├── app.py ├── models.py ├── forms.py ├── routes/ │ ├── auth.py │ └── test.py ├── templates/ │ └── *.html ├── requirements.txt ├── Procfile └── .env 
 
 
 ##  ライセンス
