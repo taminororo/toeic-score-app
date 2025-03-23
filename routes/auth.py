@@ -45,7 +45,8 @@ def login():
             return redirect(url_for('test.home'))
         else:
             flash("ログイン失敗。ユーザー名またはパスワードが間違っています。")
-
+    else:
+        print("バリデーション失敗:", form.errors)
     return render_template('login.html', form=form)
 
 @auth_bp.route('/logout')

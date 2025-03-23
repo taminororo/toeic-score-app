@@ -11,18 +11,21 @@
           <h2 class="mb-4 text-center">サインアップ</h2>
           <form method="POST" action="{{ url_for('auth.signup') }}">
             {{ form.hidden_tag() }}
+            {% for field, errors in form.errors.items() %}
+            <div class="text-danger mb-2">{{ errors[0] }}</div>
+            {% endfor %}
             <div class="mb-3">
-              <label for="username" class="form-label">ユーザー名</label>
-              <input type="text" class="form-control" id="username" name="username" required>
+              {{ form.username.label(class="form-label") }}
+              {{ form.username(class="form-control", id="username") }}
             </div>
             <div class="mb-3">
-              <label for="password" class="form-label">パスワード</label>
-              <input type="password" class="form-control" id="password" name="password" required>
+              {{ form.password.label(class="form-label") }}
+              {{ form.password(class="form-control", id="password") }}
             </div>
             <div class="d-grid">
               <button type="submit" class="btn btn-primary">登録</button>
             </div>
-          </form>
+          </form>          
         </div>
       </div>
     </div>
