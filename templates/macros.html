@@ -1,0 +1,13 @@
+{% macro color_percentage(value) %}
+    {% set percent = value|round(0, 'common') %}
+    <span class="d-block text-center py-1 px-2 rounded 
+        {% if percent == 100 %}bg-primary text-white
+        {% elif percent > 75 %}bg-success text-white
+        {% elif percent > 50 %}bg-orange text-white
+        {% elif percent > 25 %}bg-warning text-dark
+        {% else %}bg-danger text-white{% endif %}">
+        {{ percent }}%
+    </span>
+{% endmacro %}
+
+

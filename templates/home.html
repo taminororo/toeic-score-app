@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-end align-items-center">
+      {% if 'user_id' not in session %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary me-2">ログイン</a>
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">サインアップ</a>
+      {% else %}
+        <p class="me-3 mb-0">こんにちは、<strong>{{ session['username'] }}</strong>さん！</p>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-danger">ログアウト</a>
+      {% endif %}
+    </div>
+  </div>
+  
+<div class="text-center mt-5">
+    <h1 class="mb-4">{{ message }}</h1>
+
+    <div class="d-grid gap-3 col-6 mx-auto">
+        <a href="{{ url_for('test.test_list') }}" class="btn btn-primary btn-lg">記録を見る</a>
+        <p></p>
+        <a href="{{ url_for('test.new') }}" class="btn btn-success btn-lg">新しく記録する</a>
+    </div>
+</div>
+{% endblock %}
+

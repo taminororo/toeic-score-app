@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">{{ message }}</h1>
+
+    <div class="card shadow-sm p-4">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle text-center mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>テスト名</th>
+                        <th>日付</th>
+                        <th>PART1</th>
+                        <th>PART2</th>
+                        <th>PART3</th>
+                        <th>PART4</th>
+                        <th>PART5</th>
+                        <th>PART6</th>
+                        <th>PART7</th>
+                        <th>リスニング</th>
+                        <th>リーディング</th>
+                        <th>全体の正答数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ test.test_name }}</td>
+                        <td>{{ test.date }}</td>
+                        <td>{{ test.part_one }} ({{ "%.0f"|format(test.part_one / 6 * 100) }}%)</td>
+                        <td>{{ test.part_two }} ({{ "%.0f"|format(test.part_two / 25 * 100) }}%)</td>
+                        <td>{{ test.part_three }} ({{ "%.0f"|format(test.part_three / 39 * 100) }}%)</td>
+                        <td>{{ test.part_four }} ({{ "%.0f"|format(test.part_four / 30 * 100) }}%)</td>
+                        <td>{{ test.part_five }} ({{ "%.0f"|format(test.part_five / 30 * 100) }}%)</td>
+                        <td>{{ test.part_six }} ({{ "%.0f"|format(test.part_six / 16 * 100) }}%)</td>
+                        <td>{{ test.part_seven }} ({{ "%.0f"|format(test.part_seven / 54 * 100) }}%)</td>
+                        <td>{{ test.listening }} ({{ "%.0f"|format(test.listening / 100 * 100) }}%)</td>
+                        <td>{{ test.reading }} ({{ "%.0f"|format(test.reading / 100 * 100) }}%)</td>
+                        <td>{{ test.accuracy }} ({{ "%.0f"|format(test.accuracy / 200 * 100) }}%)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('test.test_list') }}" class="btn btn-primary me-2">保存する</a>
+        <a href="{{ url_for('test.destroy', id=test.id, from_='CREATE') }}" class="btn btn-danger">保存しない</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+
+{% extends "layout.html" %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">{{ message }}</h1>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>テスト名</th>
+                    <th>日付</th>
+                    <th>PART1</th>
+                    <th>PART2</th>
+                    <th>PART3</th>
+                    <th>PART4</th>
+                    <th>PART5</th>
+                    <th>PART6</th>
+                    <th>PART7</th>
+                    <th>リスニング</th>
+                    <th>リーディング</th>
+                    <th>全体の正答率</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for test in tests %}
+                <tr>
+                    <td>{{ test.id }}</td>
+                    <td>{{ test.test_name }}</td>
+                    <td>{{ test.date }}</td>
+                                 
+                    <td>{{ macros.color_percentage(test.part_one / 6 * 100) }}</td>                   
+                    <td>{{ macros.color_percentage(test.part_two / 25 * 100) }}</td>
+                    <td>{{ macros.color_percentage(test.part_three / 39 * 100) }}</td>
+                    <td>{{ macros.color_percentage(test.part_four / 30 * 100) }}</td>
+                    <td>{{ macros.color_percentage(test.part_five / 30 * 100) }}</td>                
+                    <td>{{ macros.color_percentage(test.part_six / 16 * 100) }}</td>           
+                    <td>{{ macros.color_percentage(test.part_seven / 54 * 100) }}</td>
+                    
+                    <td>{{ macros.color_percentage(test.listening / 100 * 100) }}</td>             
+                    <td>{{ macros.color_percentage(test.reading / 100 * 100) }}</td>                    
+                    <td>{{ macros.color_percentage(test.accuracy / 200 * 100) }}</td>
+
+                    <td>
+                        <form action="{{ url_for('test.destroy', id=test.id) }}" method="post" onsubmit="return confirm('本当に削除しますか？');">
+                            {{ delete_form.hidden_tag() }}
+                            <input type="hidden" name="from_" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                        </form>
+                    </td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('test.home') }}" class="btn btn-secondary">ホームに戻る</a>
+    </div>
+
+</div>
+{% endblock %}
