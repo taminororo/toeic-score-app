@@ -1,4 +1,4 @@
-
+<!-- test_list.html -->
 {% extends "layout.html" %}
 {% import "macros.html" as macros %}
 
@@ -56,7 +56,88 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        
     </div>
+
+        <!-- ▼▼▼ グラフ表示ボタンと描画エリア ▼▼▼ -->
+        <div class="text-center mt-5">
+            <button id="showChartBtn" class="btn btn-primary">グラフを表示</button>
+        </div>
+   
+        <div id="chartArea" style="display:none;" class="mt-4 text-center">
+            <style>
+              #testRadarChart {
+                width: 100%;
+                max-width: 500px;       /* PCでは最大500px */
+                aspect-ratio: 1 / 1;     /* 正方形を維持 */
+                margin: 0 auto;
+                display: block;
+              }
+            </style>
+          
+            <canvas id="testRadarChart"></canvas>
+        </div>
+          
+        
+        
+        
+
+        <!-- Chart.js & 描画スクリプト -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+        let chartInstance = null;
+
+        document.getElementById("showChartBtn").addEventListener("click", function () {
+            document.getElementById("chartArea").style.display = "block";
+
+            fetch("/chart-data")
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                alert(data.error);
+                return;
+                }
+
+                const ctx = document.getElementById("testRadarChart").getContext("2d");
+
+                if (chartInstance) {
+                chartInstance.destroy();
+                }
+
+                chartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: data.labels,
+                    datasets: data.datasets.map((ds, index) => ({
+                    label: ds.label,
+                    data: ds.data,
+                    fill: true,
+                    borderWidth: 1
+                    // Chart.js が自動で色分けしてくれる
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                    },
+                    plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                    }
+                }
+                });
+            });
+        });
+        </script>
+
+        <!-- ▲▲▲ グラフ表示ボタンと描画エリア ▲▲▲ -->
+
 
     <div class="text-center mt-4">
         <a href="{{ url_for('test.home') }}" class="btn btn-secondary">ホームに戻る</a>

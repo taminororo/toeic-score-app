@@ -6,19 +6,20 @@ from routes.auth import auth_bp
 from flask_wtf import CSRFProtect # CSRF対策用の拡張ライブラリ
 from dotenv import load_dotenv
 import os
+from config import DevelopmentConfig, ProductionConfig
 
-load_dotenv()
+load_dotenv()   # .envから環境変数を読み込む（ローカル開発用）
 
 app = Flask(__name__, instance_relative_config=True)
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test_scores.db'  # SQLiteのデータベースファイルを指定
-#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 警告を抑制するための設定
-#app.config['SECRET_KEY'] = 'W32eBFv9TbjWeDl6k5j0gKbvNJ3GZJZ7Qm0f0rjObWo'  # セッション用の秘密
+# FLASK_ENVで判定
+env = os.getenv("FLASK_ENV", "production") == "1"
 
-#   .envファイルから環境変数を読み込む
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# 設定を切り替えて適用
+if env == "development":
+    app.config.from_object(DevelopmentConfig)
+else:
+    app.config.from_object(ProductionConfig)
 
 csrf = CSRFProtect(app)  # CSRF対策を有効化
 db.init_app(app)

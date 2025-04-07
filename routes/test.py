@@ -1,10 +1,11 @@
 # routes/test.py
 from flask import Blueprint
-from models import User, db, TestScore
-from flask import Flask, render_template, request, session
+from models import db, TestScore
+from flask import render_template, request, session
 from datetime import datetime
 from utils import login_required
 from forms import TestForm, DeleteForm
+from flask import jsonify
 test_bp = Blueprint('test', __name__)
 
 
@@ -126,3 +127,48 @@ def destroy(id):
     user_id = session['user_id']
     tests = TestScore.query.filter_by(user_id=user_id).all()
     return render_template('test_list.html', message=message, tests=tests, delete_form=DeleteForm())
+
+@test_bp.route('/chart-data')
+@login_required
+def chart_data():
+    user_id = session['user_id']
+    tests = (
+        TestScore.query
+        .filter_by(user_id=user_id)
+        .order_by(TestScore.date.asc())
+        .all()
+    )
+
+    if not tests:
+        return jsonify({"error": "データがありません"})
+
+    labels = ["PART1", "PART2", "PART3", "PART4", "PART5", "PART6", "PART7"]
+
+    max_scores = [6, 25, 39, 30, 30, 16, 54]  # ← 各パートの満点
+
+    datasets = []
+    for test in tests:
+        raw_scores = [
+            test.part_one or 0,
+            test.part_two or 0,
+            test.part_three or 0,
+            test.part_four or 0,
+            test.part_five or 0,
+            test.part_six or 0,
+            test.part_seven or 0,
+        ]
+        # パーセントに変換（例：4点 / 6点 → 66.67）
+        percentage_scores = [
+            round(score / max_score * 100, 1) for score, max_score in zip(raw_scores, max_scores)
+        ]
+
+        datasets.append({
+            "label": f"{test.test_name} ({test.date})",
+            "data": percentage_scores,
+            "fill": True
+        })
+
+    return jsonify({
+        "labels": labels,
+        "datasets": datasets
+    })
